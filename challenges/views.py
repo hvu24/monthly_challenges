@@ -39,7 +39,8 @@ def index(request):
 
     for month in months:
         capitalized_month = month.capitalize()
-        month_path = reverse("month-challenge", args=[month]) #/challenges/month
+        # /challenges/month
+        month_path = reverse("month-challenge", args=[month])
         # absolute_month_path = request.build_absolute_uri(month_path) #localhost:8000/challenges/month
         list_items += f"<li><a href='{month_path}'>{capitalized_month}</a></li>"
         response_data = f'<ul>{list_items}</ul>'
@@ -52,7 +53,8 @@ def monthly_challenge_by_number(request, month):
         return HttpResponseNotFound("Invalid Month")
     redirect_month = months[month - 1]
     # return HttpResponseRedirect("/challenges/" + redirect_month)
-    redirect_path = reverse('month-challenge', args=[redirect_month])  # /challenge/month
+    redirect_path = reverse(
+        'month-challenge', args=[redirect_month])  # /challenge/month
     return HttpResponseRedirect(redirect_path)
 
 
@@ -61,7 +63,10 @@ def monthly_challenge(request, month):
         challenge_text = monthly_challenges[month]
         # response_data = render_to_string('challenges/challenge.html')
         # return HttpResponse(response_data)
-        return render(request, 'challenges/challenge.html')
+        return render(request, 'challenges/challenge.html', {
+            'text': challenge_text,
+            'month': month.capitalize()
+        })
     except:
         return HttpResponseNotFound('This month is not supported')
     # return HttpResponse(challenge_text)
